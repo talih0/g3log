@@ -56,7 +56,7 @@ The logger will catch certain fatal events *(Linux/OSX: signals, Windows: fatal 
  
 6. It is cross platform. Tested and used by me or by clients on OSX, Windows, Ubuntu, CentOS
 
-7. G3log and G2log is used world wide in commercial products as well as hobby projects. G2log is used since early 2011.
+7. G3log and G2log are used worldwide in commercial products as well as hobby projects. G2log is used since early 2011.
 
 8. The code is given for free as public domain. This gives the option to change, use, and do whatever with it, no strings attached.
 
@@ -110,7 +110,7 @@ struct CustomSink {
 
 // in main.cpp, main() function
 
-auto sinkHandle = logworker->addSink(std2::make_unique<CustomSink>(),
+auto sinkHandle = logworker->addSink(std::make_unique<CustomSink>(),
                                      &CustomSink::ReceiveLogMessage);
 ```
 
@@ -124,14 +124,14 @@ Example usage where a custom sink is added. A function is called though the sink
 // main.cpp
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 
 #include "CustomSink.h"
 
 int main(int argc, char**argv) {
    using namespace g3;
    std::unique_ptr<LogWorker> logworker{ LogWorker::createLogWorker() };
-   auto sinkHandle = logworker->addSink(std2::make_unique<CustomSink>(),
+   auto sinkHandle = logworker->addSink(std::make_unique<CustomSink>(),
                                           &CustomSink::ReceiveLogMessage);
    
    // initialize the logger before it can receive LOG calls
@@ -170,7 +170,7 @@ Example usage where a the default file logger is used **and** a custom sink is a
 // main.cpp
 #include <g3log/g3log.hpp>
 #include <g3log/logworker.hpp>
-#include <g3log/std2_make_unique.hpp>
+#include <memory>
 
 #include "CustomSink.h"
 
@@ -185,7 +185,7 @@ int main(int argc, char**argv) {
    
    LOG(DEBUG) << "Make log call, then add another sink";
    
-   worker->addSink(std2::make_unique<CustomSink>(),
+   worker->addSink(std::make_unique<CustomSink>(),
                                   &CustomSink::ReceiveLogMessage);
    
    ...
@@ -205,14 +205,49 @@ more details
 
 ```
 cd g3log
+cd 3rdParty/gtest
+unzip gtest-1.7.0.zip
+cd ../../
 mkdir build
 cd build
 ```
+## Configuring for installing on nix (OSX, Linux, MinGW)
+Default install prefix on Linux is `/usr/local`
+To change it please set  `CPACK_PACKAGING_INSTALL_PREFIX `
+
+```
+cmake -DCPACK_PACKAGING_INSTALL_PREFIX= ...
+```
+
 
 ## Building on Linux
 ```
 cmake -DCMAKE_BUILD_TYPE=Release ..
 make 
+```
+## Installing On Linux
+```
+sudo make install
+```
+Alternative on Debian
+```
+make package
+sudo dpkg -i g3log-<version>-Linux.deb
+```
+
+## Building on MinGW
+```
+cmake -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release ..
+make 
+```
+## Installing on MinGW
+```
+make install
+```
+Alternative using NSIS
+```
+make package
+g3log-<version>-win32.exe
 ```
 
 ## Building on Windows
@@ -250,13 +285,24 @@ G3log aims to keep all background logging to sinks with as little log overhead a
 The worst case latency is kept stabile with no extreme peaks, in spite of any sudden extreme pressure.  I have a blog post regarding comparing worst case latency for g3log and other loggers which might be of interest. 
 You can find it here: https://kjellkod.wordpress.com/2015/06/30/the-worlds-fastest-logger-vs-g3log/
      
-#Enjoy
+# Feedback
 If you like this logger (or not) it would be nice with some feedback. That way I can improve g3log and g2log and it is also nice to see if someone is using it.
 
  If you have ANY questions or problems please do not hesitate in contacting me on my blog 
 http://kjellkod.wordpress.com/2011/11/17/kjellkods-g2log-vs-googles-glog-are-asynchronous-loggers-taking-over  
 or at ```Hedstrom at KjellKod dot cc```
 
+# Say Thanks
+This logger is available for free and all of its source code is public domain.  A great way of saying thanks is to send a donation. It would go a long way not only to show your support but also to boost continued development.
+
+[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.me/g3log/25)
+
+* $5 for a cup of coffee
+* $10 for pizza 
+* $25 for a lunch or two
+* $100 for a date night with my wife (which buys family credit for evening coding)
+* $$$ for upgrading my development environment
+* $$$$ :)
 
 Cheers
 

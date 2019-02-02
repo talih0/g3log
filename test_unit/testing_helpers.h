@@ -104,7 +104,7 @@ struct RestoreFileLogger {
   std::string resetAndRetrieveContent();
   
 
-private:
+
   std::unique_ptr<g3::SinkHandle<g3::FileSink>> _handle;
   std::string _log_file;
 };
@@ -135,6 +135,9 @@ private:
   };
 } // testing_helpers
 
-
+#ifdef CHANGE_G3LOG_DEBUG_TO_DBUG
+#undef DEBUG
+#define DEBUG DBUG
+#endif
 
 
